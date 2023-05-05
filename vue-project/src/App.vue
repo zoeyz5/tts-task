@@ -108,7 +108,7 @@ const loop = () => {
 
   <div class="app">
     <button :class="'start'" @click = "play(starting); play(words[0].sound)">Start</button>
-    <button :class="`mic`" @click="ToggleMic">Continue</button>
+    <button :class="`mic`" @click="ToggleMic">Play/Verify</button>
     <div class="transcript" v-text="transcript"></div>
 
   </div>
