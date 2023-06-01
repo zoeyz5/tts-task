@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import pinyin from 'pinyin'
-
+  import { speak } from './speak.vue'
   let eight = new SpeechSynthesisUtterance("八");
   let pull = new SpeechSynthesisUtterance("拔");
   let target = new SpeechSynthesisUtterance("靶");
@@ -9,7 +9,10 @@
   let Csound = [eight, pull, target, dad]
   Csound = Csound.map(sound => sound.lang = 'zh')
   let current = 0;
-
+  // remove punctuation from string
+  function removePunctuation(string) {
+    return string.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+  }
   const words = [{pinyin: "bā", character:"八", meaning:"eight", sound: eight},
                  {pinyin: "bá", character:"拔", meaning:"to pull out", sound: pull},
                  {pinyin: "bǎ", character:"靶", meaning:"target", sound: target},
@@ -29,8 +32,10 @@
 
   const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
   const sr = new Recognition()
-  sr.lang = 'cmn-Hans-CN'
+  sr.lang = 'zh'
   onMounted(() => {
+    // speak("你好", 'zh');
+    // speak("hello my name is jkq", 'en');
 	sr.continuous = true
 	sr.interimResults = true
 	sr.onstart = () => {
@@ -42,9 +47,6 @@
 		isRecording.value = false
 	}
 	sr.onresult = (evt) => {
-		for (let i = 0; i < evt.results.length; i++) {
-			const result = evt.results[i]
-		}
 		const t = Array.from(evt.results)
 			.map(result => result[0])
 			.map(result => result.transcript)
